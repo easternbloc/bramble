@@ -8,7 +8,9 @@
     "tool",
     "automation",
     "updater",
-    "dependencies"
+    "dependencies",
+    "package",
+    "update"
   ],
   "author": {
     "name": "Ben Marvell"
