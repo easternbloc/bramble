@@ -1,7 +1,7 @@
 {
   "name": "bramble",
   "description": "Easy updating and testing of your dependencies",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "keywords": [
     "npm",
     "build",
