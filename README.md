@@ -3,6 +3,10 @@ bramble
 
 A tool to easily update and test your package.json against the latest versions.
 
+Also my cat.
+
+![](http://f.cl.ly/items/1Z112y2x0y1F3O1Y2L1N/bramble.jpg)
+
 ## Global Install
 ```
 npm install -g bramble
