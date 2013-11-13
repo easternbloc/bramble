@@ -1,32 +1,45 @@
 {
-    "name": "bramble",
-    "description": "Easy updating and testing of your dependencies",
-    "version": "0.1.0",
-    "keywords": ["npm", "build", "tool", "automation", "updater", "dependencies"],
-    "author": {
-        "name": "Ben Marvell"
+  "name": "bramble",
+  "description": "Easy updating and testing of your dependencies",
+  "version": "0.1.0",
+  "keywords": [
+    "npm",
+    "build",
+    "tool",
+    "automation",
+    "updater",
+    "dependencies"
+  ],
+  "author": {
+    "name": "Ben Marvell"
+  },
+  "contributors": [
+    {
+      "name": "Ben Marvell",
+      "email": "ben@marvell-consulting.com"
     },
-    "contributors": [
-        { "name": "Ben Marvell", "email": "ben@marvell-consulting.com" },
-        { "name": "Leonard Martin", "email": "hello@lennym.co.uk" }
-      ],
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/easternbloc/bramble"
-    },
-    "bugs": {
-        "url": "https://github.com/easternbloc/bramble/issues"
-    },
-    "main": "./index.js",
-    "bin": "./bin/bramble",
-    "dependencies": {
-        "npm": "1.3.13",
-        "q": "0.9.7",
-        "argh": "0.1.1",
-        "colors": "0.6.2"
-    },
-    "engines": {
-        "node": "0.10.x",
-        "npm": "1.3.x"
+    {
+      "name": "Leonard Martin",
+      "email": "hello@lennym.co.uk"
     }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/easternbloc/bramble"
+  },
+  "bugs": {
+    "url": "https://github.com/easternbloc/bramble/issues"
+  },
+  "main": "./index.js",
+  "bin": "./bin/bramble",
+  "dependencies": {
+    "npm": "~1.3.14",
+    "q": "0.9.7",
+    "argh": "0.1.1",
+    "colors": "0.6.2"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.3.x"
+  }
 }
