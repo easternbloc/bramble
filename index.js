@@ -2,7 +2,11 @@ var npm = require('./lib/npm'),
     args = require('argh').argv,
     readline = require('readline'),
     Q = require('q'),
-    color = require('colors');
+    color = require('colors'),
+    installOptions = {
+        save: args.save || false,
+        dev: args.dev || false
+    };
 
 npm.list(args.dev)
     .then(function (packages) {
@@ -25,7 +29,7 @@ npm.list(args.dev)
                         console.log('Do you want to upgrade the package ' + previousPackage.green + ' to the latest version ' + latestPackage.green + ' (Y/N/T): ');
                         rl.question('', function (answer) {
                             if (answer.toLowerCase().indexOf('y') !== -1) {
-                                npm.install(latestPackage, args.save)
+                                npm.install(latestPackage, installOptions)
                                     .then(function () {
                                         if (args.test || answer.toLowerCase().indexOf('t') !== -1) {
                                             return npm.test();
@@ -38,7 +42,7 @@ npm.list(args.dev)
                                     })
                                     .then(deferred.resolve, function (err) {
                                         console.log(('NPM tests failed for ' + latestPackage + ' restoring to old version ' + previousPackage).red);
-                                        return npm.install(previousPackage, args.save).then(deferred.resolve, deferred.reject);
+                                        return npm.install(previousPackage, installOptions).then(deferred.resolve, deferred.reject);
                                     });
                             } else {
                                 deferred.resolve();
@@ -57,15 +61,31 @@ npm.list(args.dev)
         } else {
             if (outdatedPackages.length > 0) {
                 //install everything at once
-                var packagesToUpdate = [];
+                var packagesToUpdate = [],
+                    previousPackages = [];
 
                 outdatedPackages.forEach(function (package) {
                     packagesToUpdate.push(package[1] + '@' + package[4]);
+                    previousPackages.push(package[1] + '@' + package[2]);
                 });
 
                 console.log(('Installing the latest packages ' + packagesToUpdate.toString().replace(',', ', ')).green);
 
-                return npm.install(packagesToUpdate, args.save);
+                return npm.install(packagesToUpdate, installOptions)
+                    .then(function () {
+                        if (args.test) {
+                            return npm.test();
+                        } else {
+                            return Q();
+                        }
+                    }, function (err) {
+                        console.log(('NPM install failed').red);
+                        throw err;
+                    })
+                    .fail(function (err) {
+                        console.log(('NPM tests failed restoring to old versions ' + previousPackages.toString().replace(',', ', ')).red);
+                        return npm.install(previousPackages, installOptions).fail(function(err) { throw err; });
+                    });
             } else {
                 console.log('Nothing to update!');
                 return Q();
