@@ -1,5 +1,10 @@
 # Bramble Change log
 
+## 15 Nov 2013, 0.1.2
+
+* Fixed lots of jshint errors
+* Wrote a bunch of tests
+
 ## 13 Nov 2013, 0.1.1
 
 * Test flag was being ignored if not in --prompt mode

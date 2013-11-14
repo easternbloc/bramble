@@ -1,3 +1,5 @@
+'use strict';
+
 var npm = require('./lib/npm'),
     args = require('argh').argv,
     readline = require('readline'),
@@ -6,9 +8,11 @@ var npm = require('./lib/npm'),
     installOptions = {
         save: args.save || false,
         dev: args.dev || false
-    };
+    },
+    path = require('path'),
+    packageJson = require(path.resolve(process.cwd(), './package.json'));
 
-npm.list(args.dev)
+npm.list(packageJson, args.dev)
     .then(function (packages) {
         return npm.outdated(packages);
     })
@@ -19,10 +23,10 @@ npm.list(args.dev)
                 output: process.stdout
             });
 
-            var fns = outdatedPackages.map(function (package) {
-                if (package[2] !== package[4]) {
-                    var latestPackage = package[1] + '@' + package[4];
-                    var previousPackage = package[1] + '@' + package[2];
+            var fns = outdatedPackages.map(function (pack) {
+                if (pack[2] !== pack[4]) {
+                    var latestPackage = pack[1] + '@' + pack[4];
+                    var previousPackage = pack[1] + '@' + pack[2];
 
                     return function () {
                         var deferred = Q.defer();
@@ -34,13 +38,13 @@ npm.list(args.dev)
                                         if (args.test || answer.toLowerCase().indexOf('t') !== -1) {
                                             return npm.test();
                                         } else {
-                                            return Q();
+                                            return new Q();
                                         }
-                                    }, function (err) {
+                                    }, function () {
                                         console.log(('NPM install failed for ' + latestPackage).red);
                                         return deferred.reject();
                                     })
-                                    .then(deferred.resolve, function (err) {
+                                    .then(deferred.resolve, function () {
                                         console.log(('NPM tests failed for ' + latestPackage + ' restoring to old version ' + previousPackage).red);
                                         return npm.install(previousPackage, installOptions).then(deferred.resolve, deferred.reject);
                                     });
@@ -51,11 +55,11 @@ npm.list(args.dev)
                         return deferred.promise;
                     };
                 } else {
-                    return Q();
+                    return new Q();
                 }
             });
 
-            return fns.reduce(Q.when, Q()).then(function () {
+            return fns.reduce(Q.when, new Q()).then(function () {
                 rl.close();
             });
         } else {
@@ -64,9 +68,9 @@ npm.list(args.dev)
                 var packagesToUpdate = [],
                     previousPackages = [];
 
-                outdatedPackages.forEach(function (package) {
-                    packagesToUpdate.push(package[1] + '@' + package[4]);
-                    previousPackages.push(package[1] + '@' + package[2]);
+                outdatedPackages.forEach(function (pack) {
+                    packagesToUpdate.push(pack[1] + '@' + pack[4]);
+                    previousPackages.push(pack[1] + '@' + pack[2]);
                 });
 
                 console.log(('Installing the latest packages ' + packagesToUpdate.toString().replace(',', ', ')).green);
@@ -76,19 +80,19 @@ npm.list(args.dev)
                         if (args.test) {
                             return npm.test();
                         } else {
-                            return Q();
+                            return new Q();
                         }
                     }, function (err) {
                         console.log(('NPM install failed').red);
                         throw err;
                     })
-                    .fail(function (err) {
+                    .fail(function () {
                         console.log(('NPM tests failed restoring to old versions ' + previousPackages.toString().replace(',', ', ')).red);
-                        return npm.install(previousPackages, installOptions).fail(function(err) { throw err; });
+                        return npm.install(previousPackages, installOptions).fail(function (err) { throw err; });
                     });
             } else {
                 console.log('Nothing to update!');
-                return Q();
+                return new Q();
             }
         }
     })
