@@ -1,5 +1,9 @@
 # Bramble Change log
 
+## 15 Nov 2013, 0.1.3
+
+* Updated dev dependencies
+
 ## 15 Nov 2013, 0.1.2
 
 * Fixed lots of jshint errors
