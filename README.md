@@ -1,7 +1,15 @@
-bramble
+Bramble
 =========
 
-A tool to easily update and test your package.json against the latest versions.
+A is a tool which helps you safely upgrade your [NPM](http://npmjs.org)
+dependencies.
+
+Running Bramble will look at each dependency in your package.json, and one by
+one will ask if you want to update that dependency. If you let it, Bramble will
+then download the latest version of that dependency, optionally (with the
+--test flag) running your test suite to check for any breaking changes in the
+new version. Finally, Bramble will (with the --save flag) write the new version
+to your package.json.
 
 He's also my cat.
 
