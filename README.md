@@ -1,7 +1,7 @@
 Bramble
 =========
 
-A is a tool which helps you safely upgrade your [NPM](http://npmjs.org)
+Is a tool which helps you safely upgrade your [NPM](http://npmjs.org)
 dependencies.
 
 Running Bramble will look at each dependency in your package.json, and one by
