@@ -1,5 +1,10 @@
 # Bramble Change log
 
+## 30 Nov 2013, 0.1.4
+
+* Bramble no longer allows "~" to be used in package versions.
+* Updated dependencies
+
 ## 15 Nov 2013, 0.1.3
 
 * Updated dev dependencies
