@@ -4,6 +4,8 @@ Bramble
 Is a tool which helps you safely upgrade your [NPM](http://npmjs.org)
 dependencies.
 
+[![NPM](https://nodei.co/npm/bramble.png?downloads=true&stars=true)](https://nodei.co/npm/bramble/)
+
 Running Bramble will look at each dependency in your package.json, and one by
 one will ask if you want to update that dependency (with the --prompt flag). If you let it,
 Bramble will then download the latest version of that dependency, optionally (with the
