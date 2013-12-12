@@ -4,6 +4,8 @@ Bramble
 Is a tool which helps you safely upgrade your [NPM](http://npmjs.org)
 dependencies.
 
+[![Build Status](https://travis-ci.org/easternbloc/bramble.png)](https://travis-ci.org/easternbloc/bramble)
+
 [![NPM](https://nodei.co/npm/bramble.png?downloads=true&stars=true)](https://nodei.co/npm/bramble/)
 
 Running Bramble will look at each dependency in your package.json, and one by
