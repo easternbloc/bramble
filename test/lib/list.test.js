@@ -54,7 +54,7 @@ describe('list()', sandbox(function () {
 
             it('should close the child process when done', function () {
                 process.exit.should.have.been.calledWith(0);
-            })
+            });
         });
     });
 
