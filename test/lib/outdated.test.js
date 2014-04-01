@@ -27,6 +27,10 @@ describe('outdated()', sandbox(function () {
         outdated(packages);
     });
 
+    afterEach(function () {
+        npm.load.restore();
+    });
+
     it('calls npm.load()', function () {
         npm.load.should.have.been.calledOnce;
     });

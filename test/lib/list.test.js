@@ -34,6 +34,10 @@ describe('list()', sandbox(function () {
         });
     });
 
+    afterEach(function () {
+        npm.load.restore();
+    });
+
     it('calls npm.load()', function () {
         npm.load.should.have.been.calledOnce;
     });
