@@ -21,6 +21,10 @@ describe('npm()', function () {
             deferred = npmWrapper.install(outdatedPackages, {save: true}).then(stub);
         });
 
+        afterEach(function () {
+            npm.load.restore();
+        });
+
         it('calls npm.load()', function () {
             npm.load.should.have.been.calledOnce;
         });
@@ -54,6 +58,10 @@ describe('npm()', function () {
 
             stub = this.stub();
             deferred = npmWrapper.test().then(stub);
+        });
+
+        afterEach(function () {
+            npm.load.restore();
         });
 
         it('calls npm.load()', function () {

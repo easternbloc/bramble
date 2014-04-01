@@ -34,6 +34,10 @@ describe('list()', sandbox(function () {
         });
     });
 
+    afterEach(function () {
+        npm.load.restore();
+    });
+
     it('calls npm.load()', function () {
         npm.load.should.have.been.calledOnce;
     });
@@ -54,7 +58,7 @@ describe('list()', sandbox(function () {
 
             it('should close the child process when done', function () {
                 process.exit.should.have.been.calledWith(0);
-            })
+            });
         });
     });
 

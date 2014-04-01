@@ -27,6 +27,10 @@ describe('outdated()', sandbox(function () {
         outdated(packages);
     });
 
+    afterEach(function () {
+        npm.load.restore();
+    });
+
     it('calls npm.load()', function () {
         npm.load.should.have.been.calledOnce;
     });
@@ -47,7 +51,7 @@ describe('outdated()', sandbox(function () {
 
             it('should close the child process when done', function () {
                 process.exit.should.have.been.calledWith(0);
-            })
+            });
         });
     });
 
