@@ -1,10 +1,11 @@
 'use strict';
 
+require('colors');
+
 var npm = require('./lib/npm'),
     args = require('argh').argv,
     readline = require('readline'),
     Q = require('q'),
-    color = require('colors'),
     installOptions = {
         save: args.save || false,
         dev: args.dev || false
