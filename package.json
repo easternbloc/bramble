@@ -39,8 +39,8 @@
     "test": "mocha --reporter tap test"
   },
   "dependencies": {
-    "argh": "0.1.4",
     "colors": "1.1.2",
+    "commander": "2.9.0",
     "npm": "3.5.1",
     "q": "1.4.1",
     "semver": "5.1.0"

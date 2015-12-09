@@ -1,3 +1,19 @@
 #!/usr/bin/env node
 
-require('../index');
+var command = require('commander');
+var pkg = require('../package.json');
+var bramble = require('../index');
+
+command
+    .usage('[--save] [--prompt] [--test] [--dev]')
+    .version(pkg.version)
+    .description(pkg.description)
+    .option('-s, --save', 'save the package.json on a successful install (and optional --test from your package.json')
+    .option('-t, --test', 'bramble will run "npm test" (defined in your package.json) for you after successful install of any dependencies.')
+    .option('-p, --prompt', 'prompt the user to install/skip and optionally test each dependency that needs updating')
+    .option('-d, --dev', 'include flag to also update your devDependencies')
+    ;
+
+command.parse(process.argv);
+
+bramble(command);
