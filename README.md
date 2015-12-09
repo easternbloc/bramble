@@ -15,7 +15,7 @@ Bramble will then download the latest version of that dependency, optionally (wi
 new version. Finally, Bramble will (with the --save flag) write the new version
 to your package.json.
 
-He's also my cat.
+He's also [Ben's](https://github.com/easternbloc/) cat.
 
 ![bramble cat!](http://cl.ly/image/1g2c1B2h3l0c/bramble.jpg)
 
