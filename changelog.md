@@ -1,5 +1,9 @@
 # Bramble Change log
 
+## 9 Dec 2015, 1.1.0
+
+* Respect semver options on packages. Previously bramble would just remove "~" or "^" bramble now respects this and applies it to the package. If you need to lock down your dependencies use npm shrinkwrap.
+
 ## 9 Dec 2015, 1.0.2
 
 * Added help to be more helpful (--help)

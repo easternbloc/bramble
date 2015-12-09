@@ -28,8 +28,9 @@ var run = function bramble (args) {
 
                 var fns = outdatedPackages.map(function (pack) {
                     if (pack[2] !== pack[4]) {
-                        var latestPackage = pack[1] + '@' + pack[4];
-                        var previousPackage = pack[1] + '@' + pack[2];
+                        var semVerRange = pack[5].match(/[~^]/g) || '';
+                        var latestPackage = pack[1] + '@' + semVerRange + pack[4];
+                        var previousPackage = pack[1] + '@' + semVerRange + pack[2];
 
                         return function () {
                             var deferred = Q.defer();
@@ -72,8 +73,9 @@ var run = function bramble (args) {
                         previousPackages = [];
 
                     outdatedPackages.forEach(function (pack) {
-                        packagesToUpdate.push(pack[1] + '@' + pack[4]);
-                        previousPackages.push(pack[1] + '@' + pack[2]);
+                        var semVerRange = pack[5].match(/[~^]/g) || '';
+                        packagesToUpdate.push(pack[1] + '@' + semVerRange + pack[4]);
+                        previousPackages.push(pack[1] + '@' + semVerRange + pack[2]);
                     });
 
                     console.log(('Installing the latest packages ' + packagesToUpdate.toString().replace(',', ', ')).green);
