@@ -24,9 +24,9 @@ describe('list()', sandbox(function () {
             set: this.stub()
         };
 
-        //hmmmmm
+        //need to stub send for cp.fork
         process.send = this.stub();
-        process.exit = this.stub();
+        this.stub(process, 'exit');
 
         list({
             packageJson: realPackageJson,
@@ -36,6 +36,7 @@ describe('list()', sandbox(function () {
 
     afterEach(function () {
         npm.load.restore();
+        process.exit.restore();
     });
 
     it('calls npm.load()', function () {

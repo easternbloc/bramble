@@ -17,8 +17,9 @@ describe('install()', sandbox(function () {
             set: this.stub()
         };
 
+        //need to stub send for cp.fork
         process.send = this.stub();
-        process.exit = this.stub();
+        this.stub(process, 'exit');
 
 
         deferred = install({packagesToInstall: outdatedPackages, options: {save: true}});
@@ -26,6 +27,7 @@ describe('install()', sandbox(function () {
 
     afterEach(function () {
         npm.load.restore();
+        process.exit.restore();
     });
 
     it('calls npm.load()', function () {

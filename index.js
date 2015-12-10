@@ -6,7 +6,8 @@ var npm = require('./lib/npm'),
     readline = require('readline'),
     Q = require('q'),
     path = require('path'),
-    packageJson = require(path.resolve(process.cwd(), './package.json'));
+    packageJson = require(path.resolve(process.cwd(), './package.json')),
+    Spinner = require('cli-spinner').Spinner;
 
 var run = function bramble (args) {
 
@@ -18,6 +19,9 @@ var run = function bramble (args) {
     npm.list(packageJson, args.dev)
         .then(function (packages) {
             return npm.outdated(packages);
+        }, function (err) {
+            process.stdout.write(('\nNPM list failed').red);
+            throw err;
         })
         .then(function (outdatedPackages) {
             if (args.prompt) {
@@ -34,8 +38,7 @@ var run = function bramble (args) {
 
                         return function () {
                             var deferred = Q.defer();
-                            console.log('Do you want to upgrade the package ' + previousPackage.green + ' to the latest version ' + latestPackage.green + ' (Y/N/T): ');
-                            rl.question('', function (answer) {
+                            rl.question('Do you want to upgrade the package ' + previousPackage.green + ' to the latest version ' + latestPackage.green + ' (Y/N/T): ', function (answer) {
                                 if (answer.toLowerCase().indexOf('y') !== -1) {
                                     npm.install(latestPackage, installOptions)
                                         .then(function () {
@@ -45,11 +48,11 @@ var run = function bramble (args) {
                                                 return new Q();
                                             }
                                         }, function () {
-                                            console.log(('NPM install failed for ' + latestPackage).red);
+                                            process.stdout.write(('\nNPM install failed for ' + latestPackage).red);
                                             return deferred.reject();
                                         })
                                         .then(deferred.resolve, function () {
-                                            console.log(('NPM tests failed for ' + latestPackage + ' restoring to old version ' + previousPackage).red);
+                                            process.stdout.write(('\nNPM tests failed for ' + latestPackage + ' restoring to old version ' + previousPackage).red);
                                             return npm.install(previousPackage, installOptions).then(deferred.resolve, deferred.reject);
                                         });
                                 } else {
@@ -77,9 +80,9 @@ var run = function bramble (args) {
                         packagesToUpdate.push(pack[1] + '@' + semVerRange + pack[4]);
                         previousPackages.push(pack[1] + '@' + semVerRange + pack[2]);
                     });
-
-                    console.log(('Installing the latest packages ' + packagesToUpdate.toString().replace(',', ', ')).green);
-
+                    var installSpinner = new Spinner(('Installing the latest packages ' + packagesToUpdate.toString().replace(',', ', ') + ' %s').green);
+                    installSpinner.setSpinnerString(5);
+                    installSpinner.start();
                     return npm.install(packagesToUpdate, installOptions)
                         .then(function () {
                             if (args.test) {
@@ -88,24 +91,32 @@ var run = function bramble (args) {
                                 return new Q();
                             }
                         }, function (err) {
-                            console.log(('NPM install failed').red);
+                            process.stdout.write(('\nNPM install failed').red);
                             throw err;
                         })
+                        .fin(function () {
+                            installSpinner.stop();
+                        })
                         .fail(function () {
-                            console.log(('NPM tests failed restoring to old versions ' + previousPackages.toString().replace(',', ', ')).red);
-                            return npm.install(previousPackages, installOptions).fail(function (err) { throw err; });
+                            var revertSpinner = new Spinner(('NPM tests failed restoring to old versions ' + previousPackages.toString().replace(',', ', ') + ' %s').red);
+                            revertSpinner.setSpinnerString(5);
+                            revertSpinner.start();
+                            return npm.install(previousPackages, installOptions).fail(function (err) {
+                                revertSpinner.stop();
+                                throw err;
+                            });
                         });
                 } else {
-                    console.log('Nothing to update!');
+                    process.stdout.write('\nNothing to update!');
                     return new Q();
                 }
             }
         })
         .then(function () {
-            console.log('Finished!');
+            process.stdout.write('\nFinished!\n'.green);
             process.exit(0);
         }, function () {
-            console.log('Failed!');
+            process.stdout.write('\nFailed!\n'.red);
             process.exit(1);
         });
 };
