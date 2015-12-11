@@ -20,15 +20,16 @@ describe('outdated()', sandbox(function () {
             outdated: this.stub().yields(undefined, outdatedPackages)
         };
 
-        //hmmmmm
+        //need to stub send for cp.fork
         process.send = this.stub();
-        process.exit = this.stub();
+        this.stub(process, 'exit');
 
         outdated(packages);
     });
 
     afterEach(function () {
         npm.load.restore();
+        process.exit.restore();
     });
 
     it('calls npm.load()', function () {
